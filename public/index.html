@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BullEx Basic IA</title>
+<style>
+body {
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    font-family:Arial;
+}
+
+.signal {
+    font-size:50px;
+    margin-top:80px;
+}
+
+.up { color:#22c55e; }
+.down { color:#ef4444; }
+.wait { color:gray; }
+</style>
+</head>
+<body>
+
+<h2>Indicador IA - Básico</h2>
+<div id="signal" class="signal wait">CARREGANDO...</div>
+
+<script>
+let ws = new WebSocket(
+  location.protocol === "https:"
+    ? "wss://" + location.host
+    : "ws://" + location.host
+);
+
+ws.onmessage = function(event){
+    let data = JSON.parse(event.data);
+    let el = document.getElementById("signal");
+
+    el.innerText = data.signal;
+    el.className = "signal";
+
+    if(data.signal === "ACIMA") el.classList.add("up");
+    else if(data.signal === "ABAIXO") el.classList.add("down");
+    else el.classList.add("wait");
+};
+</script>
+
+</body>
+</html>
